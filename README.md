@@ -84,7 +84,6 @@ cargo run --locked -p story    # or: universe
 ## Pricing
 
 - **$1 / month per device** — every Tench app.
-- Bulk pricing for 5+ devices.
 
 → https://tenchsoft.com/pricing
 
