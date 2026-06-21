@@ -1,0 +1,12 @@
+[package]
+name = "tench-workspace-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Shared Tench workspace, file, and project runtime boundaries"
+
+[dependencies]
+serde.workspace = true
+tench-fs-core.workspace = true
+tench-storage-core.workspace = true

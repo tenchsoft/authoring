@@ -1,0 +1,6 @@
+{
+  "identifier": "default",
+  "description": "Default desktop permissions for Tench Universe",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

@@ -1,0 +1,14 @@
+# Design: modal-close-x
+
+## 한 줄 정의
+모달 우상단의 닫기(X) 버튼. 기존 버튼 컴포넌트 재사용.
+
+## Component breakdown
+| Component | role | debug_id |
+|-----------|------|----------|
+| Close X button | `Button` | `universe.modal.<name>.close` |
+
+기존 버튼 디자인 사용.
+
+## Out of scope
+- 모달 내용 (별도 design).

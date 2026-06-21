@@ -1,0 +1,51 @@
+# Implement: command-palette-add-chapter-row-button
+
+> 작성 시점과 실행 시점 사이 코드 변경 가능성. 위치는 항상 grep으로 재확인 후 변경.
+
+## 목표
+- 커맨드 팔레트에서 "Add chapter" 행 클릭 시 새 챕터가 생성되고, 선택되며, 팔레트가 닫힌다.
+
+## 영향 받는 영역
+| 영역 | 무엇이 바뀌나 | 찾기 전략 |
+|------|----------------|-----------|
+| `apps/story/src-tauri/src/ui/commands.rs::command_labels` | 인덱스 5 = "Add chapter" | `fn command_labels` |
+| `apps/story/src-tauri/src/ui/mod.rs::dispatch_command_palette` | 인덱스 5 → `add_chapter("New Chapter")` | `fn dispatch_command_palette` |
+| `apps/story/src-tauri/src/ui/mod.rs::on_pointer_event` | 커맨드 행 클릭 → `dispatch_command_palette` 호출 | `grep -n 'dispatch_command_palette' mod.rs` |
+| `apps/story/src-tauri/src/ui/state.rs::add_chapter` | 엔진에 챕터 추가, `selected_chapter_idx` 갱신 | `fn add_chapter` |
+| `apps/story/src-tauri/src/ui/mod.rs::command_debug_ids` | 인덱스 5 = `"story.command.add_chapter"` | `fn command_debug_ids` |
+| `apps/story/src-tauri/src/ui/mod.rs::story_automation_nodes` | `story.command.add_chapter` 노드 emit | `grep -n 'story.command.add_chapter'` |
+
+## 필요한 변경 (의도 단위)
+
+### 1. Add chapter 행 렌더
+- **입력**: `show_command_palette == true`
+- **처리**: `paint_command_palette`에서 `command_labels()` 순회. 인덱스 5번째 행에 "Add chapter" 텍스트 렌더. 위치: `palette.y0 + 60.0 + 5 * 22.0`.
+- **출력/사이드 이펙트**: 시각적 행.
+- **순서/우선순위**: 다른 커맨드 행과 함께.
+
+### 2. 행 클릭 → 챕터 추가
+- **입력**: pointer down, `show_command_palette == true`, `hit_test_command_row`가 5 반환
+- **처리**: `dispatch_command_palette(5)` → `state.add_chapter("New Chapter")` 호출. 엔진에 새 챕터 추가, `selected_chapter_idx = chapters.len() - 1`. `show_command_palette = false`.
+- **출력/사이드 이펙트**: 새 챕터 생성, 선택, 팔레트 닫힘, repaint.
+- **순서/우선순위**: 팔레트 행 hit-test 성공 시.
+
+### 3. 자동화 노드
+- **입력**: `show_command_palette == true`
+- **처리**: `story.command.add_chapter` Button 노드를 5번째 행 위치에 emit.
+- **출력/사이드 이펙트**: automation tree에 노드 추가.
+- **순서/우선순위**: 다른 커맨드 노드와 함께.
+
+## 새 자동화 노드
+| debug_id | role | value | 노출 조건 |
+|----------|------|-------|----------|
+| `story.command.add_chapter` | Button | `"Add chapter"` | `show_command_palette == true` |
+
+## 의존
+- 선행 implement: 없음.
+- 영향 받는 implement: `automatic-command-palette-render-behavior` (동일 팔레트), `automatic-chapter-selection-highlight-behavior` (챕터 추가 후 하이라이트).
+
+## 작업 절차
+1. spec/design/background 읽기
+2. grep으로 위치 확정 (`grep -n 'add_chapter\|Add chapter' mod.rs state.rs commands.rs`)
+3. 의도대로 코드 변경 (현재 구현이 spec과 일치하는지 확인)
+4. cargo check 통과 확인

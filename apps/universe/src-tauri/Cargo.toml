@@ -1,0 +1,24 @@
+[package]
+name = "tench-universe"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Tench Universe desktop app"
+
+[lib]
+name = "tench_universe_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build.workspace = true
+
+[dependencies]
+tauri.workspace = true
+tauri-plugin-dialog.workspace = true
+tench-storage-core.workspace = true
+tench-ui = { workspace = true, features = ["tauri"] }
+
+[dev-dependencies]
+tench-ui-test.workspace = true
+tench-ui-automation-core.workspace = true

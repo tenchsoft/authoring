@@ -1,0 +1,15 @@
+[package]
+name = "tench-story-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Shared core logic for Tench Story (book authoring tool)"
+
+[dependencies]
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tench-document-core.workspace = true
+tench-office-io.workspace = true
+zip.workspace = true

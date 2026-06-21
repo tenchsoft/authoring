@@ -1,0 +1,32 @@
+[package]
+name = "tench-story"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Tench Story desktop app"
+
+[lib]
+name = "tench_story_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build.workspace = true
+
+[dependencies]
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tauri.workspace = true
+tauri-plugin-dialog.workspace = true
+tench-document-core.workspace = true
+tench-office-io.workspace = true
+tench-storage-core.workspace = true
+tench-story-core.workspace = true
+tench-workspace-core.workspace = true
+tench-ui = { workspace = true, features = ["tauri"] }
+zip.workspace = true
+
+[dev-dependencies]
+tench-ui-test.workspace = true
+tench-ui-automation-core.workspace = true
